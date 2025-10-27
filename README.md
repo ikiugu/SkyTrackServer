@@ -2,6 +2,11 @@
 
 Backend server application for SkyTrack built with Spring Boot.
 
+## Related Repositories
+
+- **[SkyTrack (Main)](https://github.com/ikiugu/SkyTrack)** - Complete project overview and architecture
+- **[SkyTrack Android](https://github.com/ikiugu/SkyTrackAndroid)** - Android mobile application
+
 ## Technologies
 
 - **Java 17**
