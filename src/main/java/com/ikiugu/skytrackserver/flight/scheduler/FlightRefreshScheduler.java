@@ -2,10 +2,14 @@ package com.ikiugu.skytrackserver.flight.scheduler;
 
 import com.ikiugu.skytrackserver.aviation.dto.AviationstackResponse.FlightData;
 import com.ikiugu.skytrackserver.aviation.service.AviationstackClient;
+import com.ikiugu.skytrackserver.events.FlightStatusEvent;
+import com.ikiugu.skytrackserver.events.producer.FlightStatusEventProducer;
 import com.ikiugu.skytrackserver.flight.Flight;
 import com.ikiugu.skytrackserver.flight.mapper.FlightMapper;
 import com.ikiugu.skytrackserver.flight.service.FlightChangeDetector;
 import com.ikiugu.skytrackserver.flight.service.FlightService;
+import com.ikiugu.skytrackserver.flight.service.StatusVersionService;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -22,16 +26,22 @@ public class FlightRefreshScheduler {
   private final FlightService flightService;
   private final FlightMapper flightMapper;
   private final FlightChangeDetector changeDetector;
+  private final FlightStatusEventProducer eventProducer;
+  private final StatusVersionService statusVersionService;
 
   public FlightRefreshScheduler(
       AviationstackClient aviationstackClient,
       FlightService flightService,
       FlightMapper flightMapper,
-      FlightChangeDetector changeDetector) {
+      FlightChangeDetector changeDetector,
+      FlightStatusEventProducer eventProducer,
+      StatusVersionService statusVersionService) {
     this.aviationstackClient = aviationstackClient;
     this.flightService = flightService;
     this.flightMapper = flightMapper;
     this.changeDetector = changeDetector;
+    this.eventProducer = eventProducer;
+    this.statusVersionService = statusVersionService;
   }
 
   @Scheduled(fixedRateString = "${flight.refresh.interval:7200000}") // 2 hours default
@@ -91,7 +101,19 @@ public class FlightRefreshScheduler {
                           change.oldStatus(),
                           change.newStatus());
                       changed.incrementAndGet();
-                      // Event publishing will be handled in next phase
+
+                      // Increment version and publish event
+                      Long version = statusVersionService.incrementVersion(change.flightNumber());
+                      FlightStatusEvent event =
+                          new FlightStatusEvent(
+                              change.flightNumber(),
+                              change.newStatus(),
+                              change.newGate(),
+                              change.delayMinutes(),
+                              version,
+                              Instant.now(),
+                              change.isUrgent());
+                      eventProducer.publishFlightStatusChange(event);
                     });
           }
         } catch (Exception e) {
