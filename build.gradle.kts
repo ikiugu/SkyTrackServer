@@ -58,6 +58,7 @@ dependencies {
 	
 	// Testing
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testRuntimeOnly("com.h2database:h2")
 	testImplementation("org.springframework.graphql:spring-graphql-test")
 	testImplementation("org.springframework.kafka:spring-kafka-test")
 	testImplementation("org.springframework.security:spring-security-test")
