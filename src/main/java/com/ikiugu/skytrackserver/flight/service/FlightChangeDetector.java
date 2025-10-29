@@ -1,9 +1,8 @@
 package com.ikiugu.skytrackserver.flight.service;
 
 import com.ikiugu.skytrackserver.flight.Flight;
-import org.springframework.stereotype.Service;
-
 import java.util.Optional;
+import org.springframework.stereotype.Service;
 
 @Service
 public class FlightChangeDetector {
