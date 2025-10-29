@@ -12,12 +12,13 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.TestPropertySource;
 
 @DataJpaTest
-@TestPropertySource(properties = {
-    "spring.flyway.enabled=false",
-    "spring.datasource.url=jdbc:h2:mem:testdb",
-    "spring.datasource.driver-class-name=org.h2.Driver",
-    "spring.jpa.hibernate.ddl-auto=create-drop"
-})
+@TestPropertySource(
+    properties = {
+      "spring.flyway.enabled=false",
+      "spring.datasource.url=jdbc:h2:mem:testdb",
+      "spring.datasource.driver-class-name=org.h2.Driver",
+      "spring.jpa.hibernate.ddl-auto=create-drop"
+    })
 class StatusVersionServiceTest {
 
   @Autowired private StatusVersionRepository repository;
