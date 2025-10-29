@@ -3,6 +3,7 @@ plugins {
 	id("org.springframework.boot") version "3.5.7"
 	id("io.spring.dependency-management") version "1.1.7"
 	id("com.diffplug.spotless") version "6.23.0"
+	id("org.flywaydb.flyway") version "10.8.1"
 }
 
 group = "com.ikiugu"
@@ -19,7 +20,14 @@ repositories {
 	mavenCentral()
 }
 
+configurations {
+	create("flywayClasspath")
+}
+
 dependencies {
+	// Flyway Gradle plugin classpath
+	"flywayClasspath"("org.postgresql:postgresql")
+	
 	// Spring Boot Starters
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-graphql")
@@ -75,6 +83,16 @@ dependencies {
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
+
+flyway {
+	url = "jdbc:postgresql://localhost:5432/skytrack"
+	user = "sky"
+	password = "track"
+	driver = "org.postgresql.Driver"
+	locations = arrayOf("filesystem:src/main/resources/db/migration")
+}
+
+
 
 // Spotless configuration
 spotless {
