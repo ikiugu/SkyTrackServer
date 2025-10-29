@@ -47,6 +47,11 @@ public class AviationstackClient {
               }
               return Mono.justOrEmpty(response.data());
             })
-        .retryWhen(retrySpec);
+        .retryWhen(
+            reactor.util.retry.Retry.backoff(3, java.time.Duration.ofMillis(100))
+                .filter(
+                    throwable ->
+                        !(throwable instanceof RuntimeException
+                            && throwable.getMessage().contains("Aviationstack error"))));
   }
 }

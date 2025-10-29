@@ -15,6 +15,8 @@ import org.springframework.test.annotation.DirtiesContext;
     properties = {
       "spring.kafka.bootstrap-servers=${spring.embedded.kafka.brokers}",
       "spring.datasource.url=jdbc:h2:mem:testdb",
+      "spring.datasource.driver-class-name=org.h2.Driver",
+      "spring.jpa.hibernate.ddl-auto=create-drop",
       "spring.flyway.enabled=false"
     })
 @EmbeddedKafka(
