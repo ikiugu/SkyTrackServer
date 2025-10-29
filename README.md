@@ -53,7 +53,45 @@ src/
         └── SkyTrackServerApplicationTests.java
 ```
 
+## Environment Variables
+
+Required for local development:
+
+```bash
+export DATABASE_URL=jdbc:postgresql://localhost:5432/skytrack
+export DATABASE_USERNAME=sky
+export DATABASE_PASSWORD=track
+export AVIATIONSTACK_API_KEY=your_api_key_here
+export AVIATIONSTACK_BASE_URL=https://api.aviationstack.com/v1
+export OPENAI_API_KEY=sk-...
+export GOOGLE_OAUTH_WEB_CLIENT_ID=your_google_client_id.apps.googleusercontent.com
+export JWT_SECRET=change-this-to-a-long-random-secret-key-minimum-256-bits
+export FIREBASE_CONFIG_PATH=src/main/resources/firebase-service-account.json
+export KAFKA_BOOTSTRAP_SERVERS=localhost:19092
+```
+
+For production, all secrets should be injected via secure secret management.
+
 ## Development
 
 The application will start on the default Spring Boot port (8080) unless configured otherwise in `application.properties`.
 
+### Docker Compose
+
+To start the local development infrastructure (PostgreSQL and Redpanda):
+
+```bash
+./gradlew composeUp
+```
+
+To stop:
+
+```bash
+./gradlew composeDown
+```
+
+Or use docker-compose directly:
+
+```bash
+docker-compose -f docker/docker-compose.yml up -d
+```
