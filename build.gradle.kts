@@ -66,6 +66,7 @@ dependencies {
 	testImplementation("org.testcontainers:postgresql")
 	testImplementation("org.testcontainers:kafka")
 	testImplementation("org.wiremock:wiremock-standalone:3.4.0")
+	testImplementation("io.projectreactor:reactor-test")
 	testImplementation("org.skyscreamer:jsonassert:1.5.2")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
